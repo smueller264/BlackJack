@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import './game_provider.dart';
 
 class GameScreen extends StatelessWidget {
   const GameScreen({Key? key}) : super(key: key);
 
+  static const String routeName = "GameScreen";
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: Text('BlackJack'),
+        child: Text(context.watch<GameProvider>().playerScore.toString()),
       ),
     );
   }

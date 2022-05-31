@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import './screens/game_screen/game_provider.dart';
 import './screens/game_screen/game_screen.dart';
 
 void main() {
@@ -16,7 +18,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const GameScreen(),
+      initialRoute: GameScreen.routeName,
+      routes: {
+        GameScreen.routeName: ((context) {
+          return ChangeNotifierProvider(
+            create: ((context) => GameProvider()),
+            child: const GameScreen(),
+          );
+        }),
+      },
     );
   }
 }
