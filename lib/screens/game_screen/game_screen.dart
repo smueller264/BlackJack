@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'provider/game_provider.dart';
 
@@ -54,6 +55,11 @@ class GameScreen extends StatelessWidget {
             child: Center(
               child: Text(context.watch<GameProvider>().winnner),
             ),
+          ),
+          Expanded(
+            child: Center(
+                child:
+                    SvgPicture.asset("assets/images/cards/king_of_clubs2.svg")),
           ),
         ],
       ),
