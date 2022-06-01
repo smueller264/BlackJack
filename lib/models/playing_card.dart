@@ -13,11 +13,19 @@ class PlayingCard {
     required this.suit,
     required this.type,
     this.image,
-    this.faceUp = false,
+    this.faceUp = true,
   });
 
+  Map<String, dynamic> toJson() {
+    return {
+      "suit": suit.name,
+      "type": type.name,
+      "faceUp": faceUp.toString(),
+    };
+  }
+
   ///Returns a random [PlayingCard]
-  PlayingCard.random({this.faceUp = false}) {
+  PlayingCard.random({this.faceUp = true}) {
     List types = (List.from(Type.values))..shuffle();
     type = types.first;
 
@@ -32,6 +40,13 @@ class PlayingCard {
     } else {
       return CardColor.black;
     }
+  }
+
+  @override
+  String toString() {
+    final type = this.type.toString().split('.').last;
+    final suit = this.suit.toString().split('.').last;
+    return "$type of $suit";
   }
 }
 

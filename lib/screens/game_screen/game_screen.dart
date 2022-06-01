@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import './game_provider.dart';
+import 'provider/game_provider.dart';
 
 class GameScreen extends StatelessWidget {
   const GameScreen({Key? key}) : super(key: key);
@@ -11,8 +11,51 @@ class GameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text(context.watch<GameProvider>().playerScore.toString()),
+      body: Column(
+        children: [
+          Expanded(
+            child: Center(
+              child: Text(
+                context.watch<GameProvider>().player.score.toString(),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                TextButton(
+                  onPressed: context.watch<GameProvider>().gameActive
+                      ? context.read<GameProvider>().dealCard
+                      : null,
+                  child: const Text("Hit"),
+                ),
+                TextButton(
+                  onPressed: context.watch<GameProvider>().gameActive
+                      ? null
+                      : context.read<GameProvider>().resetGame,
+                  child: const Text("Reset Game"),
+                ),
+                TextButton(
+                  onPressed: context.read<GameProvider>().stand,
+                  child: const Text("Stand"),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Center(
+              child: Text(
+                context.watch<GameProvider>().dealer.score.toString(),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Center(
+              child: Text(context.watch<GameProvider>().winnner),
+            ),
+          ),
+        ],
       ),
     );
   }
