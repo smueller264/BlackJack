@@ -61,6 +61,9 @@ class GameProvider extends ChangeNotifier {
     player.score = 0;
     dealer.score = 0;
 
+    player.hasAce = false;
+    dealer.hasAce = false;
+
     currentPlayer = player;
     gameResult = null;
 

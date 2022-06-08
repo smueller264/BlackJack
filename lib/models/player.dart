@@ -14,24 +14,16 @@ class Player {
   ///Current List of Playing Cards
   List<PlayingCard> cards = [];
 
-  ///Calculates the score of the Player from scratch and decides the value of [Type.ace] either 1 or 11
   void calculateScore() {
     score = 0;
+    if (cards.any((card) => card.type == Type.ace)) hasAce = true;
     for (var card in cards) {
-      final cardValue = card.type.value;
-      if (card.type != Type.ace) {
-        score = score + cardValue;
-      } else {
-        if (score + cardValue <= 21) {
-          score = score + cardValue;
-          hasAce = true;
-        } else {
-          score = score * 1;
-          hasAce = false;
-        }
-      }
+      score = score + card.type.value;
     }
-    developer.log("$name score: $score", name: "calculateScore");
+
+    if (hasAce && score <= 11) {
+      score = score + 10;
+    }
   }
 
   Map<String, dynamic> toJson() {

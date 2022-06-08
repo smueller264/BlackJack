@@ -15,10 +15,39 @@ class GameScreen extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: Center(
-              child: Text(
-                context.watch<GameProvider>().player.score.toString(),
-              ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: Center(
+                    child: Text(
+                      "Dealer Score: ${context.watch<GameProvider>().dealer.score.toString()}",
+                    ),
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount:
+                        context.watch<GameProvider>().dealer.cards.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                        height: 75,
+                        width: 75,
+                        padding: const EdgeInsets.all(5),
+                        child: SvgPicture.asset(context
+                            .watch<GameProvider>()
+                            .dealer
+                            .cards[index]
+                            .getImageString()),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
           Expanded(
@@ -26,40 +55,55 @@ class GameScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 TextButton(
-                  onPressed: context.watch<GameProvider>().gameActive
-                      ? context.read<GameProvider>().dealCard
-                      : null,
+                  onPressed: context.read<GameProvider>().dealCard,
                   child: const Text("Hit"),
-                ),
-                TextButton(
-                  onPressed: context.watch<GameProvider>().gameActive
-                      ? null
-                      : context.read<GameProvider>().resetGame,
-                  child: const Text("Reset Game"),
                 ),
                 TextButton(
                   onPressed: context.read<GameProvider>().stand,
                   child: const Text("Stand"),
                 ),
+                TextButton(
+                  onPressed: context.read<GameProvider>().resetGame,
+                  child: const Text("Reset Game"),
+                ),
               ],
             ),
           ),
           Expanded(
-            child: Center(
-              child: Text(
-                context.watch<GameProvider>().dealer.score.toString(),
-              ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount:
+                        context.watch<GameProvider>().player.cards.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                        height: 75,
+                        width: 75,
+                        padding: const EdgeInsets.all(5),
+                        child: SvgPicture.asset(context
+                            .watch<GameProvider>()
+                            .player
+                            .cards[index]
+                            .getImageString()),
+                      );
+                    },
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  child: Center(
+                    child: Text(
+                      "Player Score: ${context.watch<GameProvider>().player.score}",
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-          Expanded(
-            child: Center(
-              child: Text(context.watch<GameProvider>().winnner),
-            ),
-          ),
-          Expanded(
-            child: Center(
-                child:
-                    SvgPicture.asset("assets/images/cards/king_of_clubs2.svg")),
           ),
         ],
       ),

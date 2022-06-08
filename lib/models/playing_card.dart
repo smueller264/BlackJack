@@ -48,6 +48,19 @@ class PlayingCard {
     final suit = this.suit.toString().split('.').last;
     return "$type of $suit";
   }
+
+  String getImageString() {
+    int cardValue = type.value;
+    String imageString = "";
+    if (cardValue == 1) {
+      imageString = "assets/images/cards/ace_of_${suit.name}.svg";
+    } else {
+      imageString =
+          "assets/images/cards/${type.value.toString()}_of_${suit.name}.svg";
+    }
+
+    return imageString;
+  }
 }
 
 enum Suit {
@@ -103,7 +116,7 @@ extension ValueExtension on Type {
       case Type.king:
         return 10;
       case Type.ace:
-        return 11;
+        return 1;
     }
   }
 }
