@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:playing_cards/playing_cards.dart';
 
 import 'provider/game_provider.dart';
+import '../../constants/frontend/playing_card_style.dart';
+import 'widgets/CardFan.dart';
 
 class GameScreen extends StatelessWidget {
   const GameScreen({Key? key}) : super(key: key);
@@ -35,14 +38,13 @@ class GameScreen extends StatelessWidget {
                         context.watch<GameProvider>().dealer.cards.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Container(
-                        height: 75,
-                        width: 75,
+                        height: 1000,
                         padding: const EdgeInsets.all(5),
-                        child: SvgPicture.asset(context
-                            .watch<GameProvider>()
-                            .dealer
-                            .cards[index]
-                            .getImageString()),
+                        child: PlayingCardView(
+                          elevation: 3.0,
+                          card:
+                              context.watch<GameProvider>().dealer.cards[index],
+                        ),
                       );
                     },
                   ),
@@ -72,28 +74,14 @@ class GameScreen extends StatelessWidget {
           Expanded(
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Flexible(
-                  flex: 1,
-                  child: ListView.builder(
-                    key: const Key("PlayerCards"),
-                    scrollDirection: Axis.horizontal,
-                    itemCount:
-                        context.watch<GameProvider>().player.cards.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        height: 75,
-                        width: 75,
-                        padding: const EdgeInsets.all(5),
-                        child: SvgPicture.asset(context
-                            .watch<GameProvider>()
-                            .player
-                            .cards[index]
-                            .getImageString()),
-                      );
-                    },
-                  ),
+                Container(
+                  height: 150,
+                  width: 300,
+                  child: CardFan(children: [
+                    for (var card in context.watch<GameProvider>().player.cards)
+                      PlayingCardView(card: card)
+                  ]),
                 ),
                 Flexible(
                   flex: 1,

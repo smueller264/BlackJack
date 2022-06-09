@@ -1,7 +1,7 @@
-import 'dart:convert';
 import 'dart:developer' as developer;
 
-import 'playing_card.dart';
+import 'package:playing_cards/playing_cards.dart';
+import '../extensions/playing_card_extension.dart';
 
 class Player {
   ///Current Playerscore
@@ -16,9 +16,9 @@ class Player {
 
   void calculateScore() {
     score = 0;
-    if (cards.any((card) => card.type == Type.ace)) hasAce = true;
+    if (cards.any((card) => card.value == CardValue.ace)) hasAce = true;
     for (var card in cards) {
-      score = score + card.type.value;
+      score = score + card.value.numValue;
     }
 
     if (hasAce && score <= 11) {
@@ -26,19 +26,10 @@ class Player {
     }
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      "score": score,
-      "hasAce": hasAce,
-      "name": name,
-      "cards": cards,
-    };
-  }
-
   ///Prints out [cards]
   void printCards() {
     for (var card in cards) {
-      developer.log(card.toString(), name: "$name cards");
+      developer.log(card.print(), name: "$name cards");
     }
   }
 
