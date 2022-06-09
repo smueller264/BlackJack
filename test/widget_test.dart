@@ -8,23 +8,53 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:provider/provider.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:blackjack/main.dart';
 
+import '../lib/models/playing_card.dart';
+import '../lib/screens/game_screen/game_screen.dart';
+import '../lib/screens/game_screen/provider/game_provider.dart';
+
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('Playing Cards get the right picture',
+      (WidgetTester tester) async {
+    final gameProvider = GameProvider();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    await tester.pumpWidget(MaterialApp(
+      home: ChangeNotifierProvider.value(
+        value: gameProvider,
+        child: const GameScreen(),
+      ),
+    ));
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    final ListView playerList =
+        tester.widget(find.byKey(const Key("PlayerCards")));
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    gameProvider.player.cards.clear();
+
+    //Create every single card
+    for (var type in Type.values) {
+      for (var suit in Suit.values) {
+        gameProvider.player.cards.add(PlayingCard(suit: suit, type: type));
+      }
+    }
+
+    gameProvider.dealer.cards.clear();
+
+    gameProvider.notifyListeners();
+
+    expect(gameProvider.player.cards.length, 52);
+    expect(gameProvider.dealer.cards.length, 0);
+
+    final List<Widget> cards =
+        tester.widgetList(find.byType(SvgPicture)).toList();
+    expect(cards.length, 52);
+
+    for (var card in gameProvider.player.cards) {
+      final cardWidget = find.byWidget(SvgPicture.asset(card.getImageString()));
+      expect(cardWidget, findsOneWidget);
+    }
   });
 }

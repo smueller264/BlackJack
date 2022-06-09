@@ -77,6 +77,7 @@ class GameScreen extends StatelessWidget {
                 Flexible(
                   flex: 1,
                   child: ListView.builder(
+                    key: const Key("PlayerCards"),
                     scrollDirection: Axis.horizontal,
                     itemCount:
                         context.watch<GameProvider>().player.cards.length,
