@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:playing_cards/playing_cards.dart';
 
 import '../../../models/player.dart';
-import '../../../extensions/playing_card_extension.dart';
 
 ///Holds the State of the BlackJack game and cointains the game logic
 class GameProvider extends ChangeNotifier {
@@ -35,16 +34,11 @@ class GameProvider extends ChangeNotifier {
     }
   }
 
-  ///Adds a random [PlayingCard] to [currentPlayer.cards]
-  void addRandomCard() {}
-
   ///Sets up a new round and deals the initial four cards, two for the player and two for the dealer
   void initialDeal() {
     player.cards.add(createRandomCard());
-    player.calculateScore();
 
     dealer.cards.add(createRandomCard());
-    dealer.calculateScore();
 
     player.cards.add(createRandomCard());
     player.calculateScore();

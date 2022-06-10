@@ -43,3 +43,9 @@ extension CardPrinting on PlayingCard {
     return "$value of $suit";
   }
 }
+
+extension RandomGenerator on PlayingCard {
+  static PlayingCard randomCard() {
+    return PlayingCard(Suit.clubs, CardValue.ace);
+  }
+}

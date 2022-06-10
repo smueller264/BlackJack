@@ -1,5 +1,4 @@
-import 'package:playing_cards/src/model/playing-card.dart';
-import 'package:playing_cards/playing_cards.dart';
+
 
 ///Basic Class representing a playing card
 ///
