@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import 'provider/game_provider.dart';
+import 'widgets/fan_container.dart';
 
 class GameScreen extends StatelessWidget {
   const GameScreen({Key? key}) : super(key: key);
@@ -15,10 +16,20 @@ class GameScreen extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: Center(
-              child: Text(
-                context.watch<GameProvider>().player.score.toString(),
-              ),
+            child: Column(
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: Center(
+                    child: Text(
+                      "Dealer Score: ${context.watch<GameProvider>().dealer.score.toString()}",
+                    ),
+                  ),
+                ),
+                FanContainer(
+                  cards: context.watch<GameProvider>().dealer.cards,
+                )
+              ],
             ),
           ),
           Expanded(
@@ -26,40 +37,36 @@ class GameScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 TextButton(
-                  onPressed: context.watch<GameProvider>().gameActive
-                      ? context.read<GameProvider>().dealCard
-                      : null,
+                  onPressed: context.read<GameProvider>().dealCard,
                   child: const Text("Hit"),
-                ),
-                TextButton(
-                  onPressed: context.watch<GameProvider>().gameActive
-                      ? null
-                      : context.read<GameProvider>().resetGame,
-                  child: const Text("Reset Game"),
                 ),
                 TextButton(
                   onPressed: context.read<GameProvider>().stand,
                   child: const Text("Stand"),
                 ),
+                TextButton(
+                  onPressed: context.read<GameProvider>().resetGame,
+                  child: const Text("Reset Game"),
+                ),
               ],
             ),
           ),
           Expanded(
-            child: Center(
-              child: Text(
-                context.watch<GameProvider>().dealer.score.toString(),
-              ),
+            child: Column(
+              children: [
+                FanContainer(
+                  cards: context.watch<GameProvider>().player.cards,
+                ),
+                Flexible(
+                  flex: 1,
+                  child: Center(
+                    child: Text(
+                      "Player Score: ${context.watch<GameProvider>().player.score}",
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-          Expanded(
-            child: Center(
-              child: Text(context.watch<GameProvider>().winnner),
-            ),
-          ),
-          Expanded(
-            child: Center(
-                child:
-                    SvgPicture.asset("assets/images/cards/king_of_clubs2.svg")),
           ),
         ],
       ),

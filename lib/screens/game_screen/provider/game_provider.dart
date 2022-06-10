@@ -1,9 +1,8 @@
 import 'dart:developer' as developer;
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:playing_cards/playing_cards.dart';
 
-import '../../../models/playing_card.dart';
 import '../../../models/player.dart';
 
 ///Holds the State of the BlackJack game and cointains the game logic
@@ -37,16 +36,14 @@ class GameProvider extends ChangeNotifier {
 
   ///Sets up a new round and deals the initial four cards, two for the player and two for the dealer
   void initialDeal() {
-    player.cards.add(PlayingCard.random());
+    player.cards.add(createRandomCard());
+
+    dealer.cards.add(createRandomCard());
+
+    player.cards.add(createRandomCard());
     player.calculateScore();
 
-    dealer.cards.add(PlayingCard.random());
-    dealer.calculateScore();
-
-    player.cards.add(PlayingCard.random());
-    player.calculateScore();
-
-    dealer.cards.add(PlayingCard.random(faceUp: false));
+    dealer.cards.add(createRandomCard());
     dealer.calculateScore();
 
     player.printCards();
@@ -61,6 +58,9 @@ class GameProvider extends ChangeNotifier {
     player.score = 0;
     dealer.score = 0;
 
+    player.hasAce = false;
+    dealer.hasAce = false;
+
     currentPlayer = player;
     gameResult = null;
 
@@ -70,9 +70,27 @@ class GameProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  ///Adds a new card to [Player.cards] of [currentPlayer] and calls [Player.calculateScore]
+  ///Returns a [PlayingCard] with random values
+  PlayingCard createRandomCard() {
+    List values = (List.from(CardValue.values))
+      ..remove(CardValue.joker_1)
+      ..remove(CardValue.joker_2)
+      ..shuffle();
+    final value = values.first;
+
+    List suits = (List.from(Suit.values))
+      ..remove(Suit.joker)
+      ..shuffle();
+    final suit = suits.first;
+
+    final randomCard = PlayingCard(suit, value);
+
+    return randomCard;
+  }
+
+  ///Adds a new card to [currentPlayer.cards] and calls [Player.calculateScore]
   void dealCard() {
-    PlayingCard randomCard = PlayingCard.random();
+    final randomCard = createRandomCard();
     currentPlayer.cards.add(randomCard);
     developer.log("$currentPlayer draws ${randomCard.toString()}",
         name: "dealCards");
